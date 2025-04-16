@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
+from django.core.wsgi import get_wsgi_application
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -67,6 +68,9 @@ TEMPLATES = [
         },
     },
 ]
+'django' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tokenn.settings')
+
 
 WSGI_APPLICATION = 'tokenn.wsgi.application'
 
