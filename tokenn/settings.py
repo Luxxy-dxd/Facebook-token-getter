@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-8-j$+i)(jqv0(co$!3(^)5w7gxx3f+fk+(jjf@!7im4!*+9e^=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://fb-token-np.onrender.com']
+ALLOWED_HOSTS = ['fb-token-np.onrender.com']
 
 
 # Application definition
